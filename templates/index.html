@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV-Based Chat</title>
+</head>
+<body>
+    <h1>Chat with CSV (RAG + Gemini AI)</h1>
+    <textarea id="userQuery" placeholder="Enter your query..." rows="4" cols="50"></textarea><br>
+    <button onclick="sendQuery()">Ask</button>
+    <div id="responseContainer"></div>
+
+    <script>
+        function sendQuery() {
+            let query = document.getElementById("userQuery").value;
+            if (!query) {
+                alert("Please enter a query!");
+                return;
+            }
+
+            fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("responseContainer").innerHTML = "<strong>Response:</strong> " + data.response;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                document.getElementById("responseContainer").innerHTML = "<strong>Error:</strong> Something went wrong!";
+            });
+        }
+    </script>
+</body>
+</html>
